@@ -2,20 +2,28 @@
  * Build automation for the project.
  */
 
-const { shExec } = require("./utils");
-const { BunBuildFlags } = require("./utils");
+import fs from "fs-extra";
 
-// Build backend dependencies
-[
-  "bun run " + BunBuildFlags + " pkg/frontend/build.js",
-  "cp -r public/ dist/",
-].forEach((command) => {
-  shExec(command);
-});
+export async function build() {
+  // Bundle the backend
+  await Bun.build({
+    root: "pkg/backend",
+    entrypoints: ["pkg/backend/main.ts"],
+    outdir: "dist/",
+    minify: true,
+  });
 
-// Build backend as executable
-shExec(
-  "bun build " +
-    BunBuildFlags +
-    " --compile --outfile dist/rground pkg/backend/main.ts"
-);
+  // Bundle the frontend
+  await Bun.build({
+    root: "pkg/frontend",
+    entrypoints: ["pkg/frontend/main.tsx"],
+    outdir: "dist/public",
+    minify: true,
+    external: ["react", "react-dom"],
+  });
+
+  // Bundle public assets
+  await fs.copy("public", "dist/public", { overwrite: true });
+}
+
+await build();

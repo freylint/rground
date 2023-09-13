@@ -1,20 +1,20 @@
 {
   "name": "rground",
-  "module": "index.ts",
+  "module": "pkg/backend/main.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run src/main.ts",
-    "build": "bun run pkg/backend/build.ts",
-    "build-gui": "bun run pkg/frontend/build.ts"
+    "start": "bun run build; bun run dist/main.js",
+    "build": "bun run ./scripts/build.js"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "fs-extra": "^11.1.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
